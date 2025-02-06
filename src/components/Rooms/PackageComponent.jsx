@@ -1,10 +1,25 @@
 import React from "react";
 import { HiArrowLongRight } from "react-icons/hi2";
-import { accomodationContents } from "../../constants/data.js";
+// import { accomodationContents } from "../../constants/data.js";
 import RoomDetailsWithBooking from "./RoomDetailsWithBooking";
 import ScrollReveal from "../ScrollReveal";
+import useFetchApi from "../../hooks/useFetchApi";
 
 const PackageComponent = ({ room }) => {
+  const {
+    data: accommodationContents,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_room.php",
+    "accommodationContents"
+  );
+
+  if (loading) return null;
+  if (error) {
+    console.error(error);
+    return null;
+  }
   return (
     <section className="bg-bg-gold-light">
       <div className="container">
@@ -69,7 +84,7 @@ const PackageComponent = ({ room }) => {
           </div>
           <RoomDetailsWithBooking
             roomDetails={room.roomDetails}
-            rojaiLink={accomodationContents[0].rojaiLink}
+            rojaiLink={accommodationContents[0].rojaiLink}
           />
         </div>
       </div>

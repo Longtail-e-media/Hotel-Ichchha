@@ -4,13 +4,31 @@ import { MdOutlineInsertEmoticon } from "react-icons/md";
 import ReusableSlider from "./ReusableSlider";
 import EnquiryForm from "./Contact/EnquiryForm";
 import ScrollReveal from "./ScrollReveal";
+import useFetchApi from "../hooks/useFetchApi";
 
 const Recreation = () => {
+  const {
+    data: recreationVenues,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_recreation.php",
+    "recreationVenues"
+  );
+
   const [showEnquiryForm, setShowEnquiryForm] = useState(false);
 
   const toggleEnquiryForm = () => {
     setShowEnquiryForm((prevState) => !prevState);
   };
+
+  if (loading) return null;
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  console.log(recreationVenues);
 
   return (
     <>
@@ -39,7 +57,8 @@ const Recreation = () => {
           >
             <div className="w-full">
               <ReusableSlider
-                images={venue.imageUrls}
+                images={venue.image}
+                alt="Recreation"
                 className="w-full h-64 sm:h-96 lg:h-80 xl:h-96 object-cover"
               />
             </div>
@@ -49,7 +68,7 @@ const Recreation = () => {
                 <p className="text-xs sm:text-sm lg:text-base text-justify">
                   {venue.description}
                 </p>
-                <ul className="flex items-center gap-4 py-4">
+                <ul className="flex items-center flex-wrap gap-4 py-4">
                   {venue.amenities.map((amenity, index) => (
                     <li
                       key={index}

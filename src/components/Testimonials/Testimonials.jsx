@@ -1,12 +1,26 @@
-import React, { useState } from "react";
-import { testimonialContents } from "../../constants/data.js";
+import React, { useState, useEffect } from "react";
 import ScrollReveal from "../ScrollReveal";
+import useFetchApi from "../../hooks/useFetchApi";
 
 const Testimonials = () => {
-  const [selectedPerson, setSelectedPerson] = useState(
-    testimonialContents[0].testimonials[0].author
+  const {
+    data: testimonialContents,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_testimonial.php",
+    "testimonialContents"
   );
+
+  const [selectedPerson, setSelectedPerson] = useState("");
   const [isVisible, setIsVisible] = useState(true);
+
+  // Update selectedPerson once the data is fetched
+  useEffect(() => {
+    if (testimonialContents && testimonialContents[0]?.testimonials) {
+      setSelectedPerson(testimonialContents[0].testimonials[0].author);
+    }
+  }, [testimonialContents]);
 
   const handlePersonClick = (person) => {
     setIsVisible(false);
@@ -20,6 +34,14 @@ const Testimonials = () => {
       }
     }, 400);
   };
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <section id="testimonials" className="bg-bg-gold-dark pt-32">
@@ -43,6 +65,7 @@ const Testimonials = () => {
                 }`}
                 title="View Testimonial"
                 aria-label="View Testimonial"
+                type="button"
               >
                 <div className="flex items-center justify-start gap-4 p-6 py-4 border-b-[1px] border-navy/10 ">
                   <img
@@ -50,7 +73,7 @@ const Testimonials = () => {
                     alt={testimonial.author}
                     className="w-16 h-16 object-cover rounded-full"
                   />
-                  <div className="flex items-start flex-col gap-0">
+                  <div className="flex items-start text-start flex-col gap-0">
                     <p className="text-base md:text-xl font-bold">
                       {testimonial.author}
                     </p>

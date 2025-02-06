@@ -6,14 +6,32 @@ import NearbyLocations from "./Nearby";
 import AboutHome from "./About/AboutHome";
 import HeroSliderCarousel from "./HeroSliderCarousel";
 // import GalleryHome from "./Gallery/GalleryHome";
-import BookNowSection from "./Contact/BookNowSection";
-import { sliderImages } from "../constants/data";
+// import { sliderImages } from "../constants/data";
 import GallerySlider from "./Gallery/GallerySlider";
+import useFetchApi from "../hooks/useFetchApi";
+import Popup from "./Popup";
 
 const Home = () => {
+  const {
+    data: sliderImages,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_slideshow.php",
+    "sliderImages"
+  );
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
   return (
     <>
-      <BookNowSection />
+      <Popup />
+
       <HeroSliderCarousel
         images={sliderImages}
         className="w-screen lg:h-screen min-h-96 object-cover"

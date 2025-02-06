@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import {
-  logo,
-  navLinks,
-  navLinksRooms,
-  navLinksEvents,
-} from "../constants/data";
+import { logo } from "../constants/data";
 import { FaWhatsapp } from "react-icons/fa";
-import ichchha from "../assets/ichchha.webp";
-import Logo from "./ui/Logo";
-import SocialLinks from "./ui/SocialLinks";
-import ContactAddressLinks from "./ui/ContactAddressLinks";
-import { IoClose } from "react-icons/io5";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import SideNav from "./SideNav";
+import useFetchApi from "../hooks/useFetchApi";
 
 const Navbar = () => {
+  const {
+    data: siteregulars,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_siteregulars.php",
+    "siteregulars"
+  );
+
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -34,16 +35,29 @@ const Navbar = () => {
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
+    ``;
+    document.body.style.overflow = !isNavOpen ? "hidden" : "auto";
   };
 
   const closeNav = () => {
     setIsNavOpen(false);
+    document.body.style.overflow = "auto";
   };
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  const { logo_upload, whatsapp_a } = siteregulars;
 
   return (
     <>
       <nav
-        className={`fixed top-0 w-full transition-all duration-${duration} z-40 ${
+        className={`fixed top-0 w-full transition-all duration-${duration} z-50 ${
           window.scrollY > 0 ? "bg-bg-gold-light" : ""
         } ${visible ? "" : "-translate-y-full"}`}
       >
@@ -62,7 +76,7 @@ const Navbar = () => {
             } ${window.scrollY > 0 ? "filter-black" : ""}`}
           >
             <Link
-              to="https://wa.me/+9779855029590"
+              to={`https://wa.me/${whatsapp_a}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-base lg:text-lg"
@@ -70,14 +84,14 @@ const Navbar = () => {
               aria-label="WhatsApp"
             >
               <FaWhatsapp className="text-3xl text-gold" />{" "}
-              <span className="hidden md:block">9855029590</span>
+              <span className="hidden md:block">{whatsapp_a}</span>
             </Link>
           </div>
 
           <h1 className="absolute left-1/2 -translate-x-1/2">
             <Link to="/">
               <img
-                src={logo}
+                src={logo_upload}
                 alt="logo"
                 className={`object-contain transition-all duration-${duration}  ${
                   visible
@@ -100,6 +114,7 @@ const Navbar = () => {
             onClick={toggleNav}
             title="Menu"
             aria-label="Menu"
+            type="button"
           >
             <span className="hidden md:block text-base lg:text-xl select-none">
               Menu
@@ -134,142 +149,7 @@ const Navbar = () => {
         <div className="h-px w-1/4 md:w-2/5 lg:w-[43%] bg-gradient-to-l from-navy/30 to-navy/30 absolute right-0" />
       </nav>
 
-      <div
-        className={`fixed inset-0 transition-all duration-500 z-50 max-h-screen bg-pink-gold`}
-        style={{
-          // transform: isNavOpen ? "translateY(0)" : "translateY(-100%)",
-          transform: isNavOpen ? "translateY(0)" : "translateY(0)",
-          opacity: isNavOpen ? "1" : "0",
-          pointerEvents: isNavOpen ? "auto" : "none",
-        }}
-      >
-        <button
-          onClick={closeNav}
-          className="absolute top-0 right-0 px-4 py-6 md:py-6 md:px-8 text-gold z-10"
-          title="Close"
-          aria-label="Close"
-        >
-          <IoClose className="text-4xl" />
-        </button>
-        <div className="flex w-full items-center flex-col lg:flex-row justify-between max-h-screen md:h-screen overflow-y-auto">
-          <div
-            className="relative w-full lg:w-2/3 h-full bg-pink-gold text-ivory order-2 lg:order-1"
-            style={{
-              backgroundImage: `url(${ichchha})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            <div className="overlay absolute inset-0 bg-black opacity-80 z-0"></div>
-            <div className="container flex flex-col md:flex-row items-center justify-center gap-16 py-12 md:px-12 md:py-24 lg:p-24 h-full">
-              <ul className="flex flex-1 flex-row md:flex-col flex-wrap items-start justify-center gap-8 z-10 text-ivory/90 font-medium">
-                {navLinks.map((link) => (
-                  <li
-                    className="peer peer-hover:opacity-50 hover:translate-x-2 hover:text-goldLight transition-all duration-300 ease-linear"
-                    key={link.id}
-                    onClick={closeNav}
-                  >
-                    <NavLink
-                      to={link.link}
-                      className={({ isActive }) =>
-                        `text-xl md:text-3xl lg:text-4xl font-extrabold ${
-                          isActive ? "text-gold" : ""
-                        }`
-                      }
-                    >
-                      {link.title}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-1 justify-center flex-col gap-10 md:gap-20 z-10">
-                <ul className="flex flex-col items-center md:items-start gap-4">
-                  {navLinksRooms.map((category) => (
-                    <li key={category.id} className="group list-none">
-                      <NavLink
-                        to={category.link}
-                        onClick={closeNav}
-                        className={({ isActive }) =>
-                          `block text-center md:text-left text-2xl md:text-3xl lg:text-4xl font-extrabold hover:translate-x-2 hover:text-goldLight transition-all duration-300 ease-linear ${
-                            isActive ? "text-gold" : ""
-                          }`
-                        }
-                      >
-                        {category.title}
-                      </NavLink>
-                      <ul className="mt-4 flex flex-col flex-wrap items-center justify-center md:items-start gap-4">
-                        {category.subLinks.map((subLink) => (
-                          <li
-                            key={subLink.id}
-                            onClick={closeNav}
-                            className="text-sm peer peer-hover:opacity-50 hover:translate-x-2 hover:text-goldLight transition-all duration-300 ease-linear"
-                          >
-                            <NavLink
-                              to={subLink.link}
-                              className={({ isActive }) =>
-                                `${isActive ? "text-gold" : ""}`
-                              }
-                            >
-                              {subLink.title}
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-
-                <ul className="flex flex-col items-start gap-4">
-                  {navLinksEvents.map((category) => (
-                    <li key={category.id} className="group list-none">
-                      <NavLink
-                        to={category.link}
-                        onClick={closeNav}
-                        className={({ isActive }) =>
-                          `block text-center md:text-left text-2xl md:text-3xl lg:text-4xl font-extrabold hover:translate-x-2 hover:text-goldLight transition-all duration-300 ease-linear ${
-                            isActive ? "text-gold" : ""
-                          }`
-                        }
-                      >
-                        {category.title}
-                      </NavLink>
-                      <ul className="mt-4 flex flex-col flex-wrap items-center justify-center md:items-start gap-4">
-                        {category.subLinks.map((subLink) => (
-                          <li
-                            key={subLink.id}
-                            className="text-sm peer peer-hover:opacity-50 hover:translate-x-2 hover:text-goldLight transition-all duration-300 ease-linear"
-                            onClick={closeNav}
-                          >
-                            {/* <a href={`${subLink.link}`}>
-                              {subLink.title}
-                            </a> */}
-
-                            <NavLink
-                              to={`/events#${subLink.id}`}
-                              // className={({ isActive }) =>
-                              //   `${isActive ? "text-gold" : ""}`
-                              // }
-                            >
-                              {subLink.title}
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="w-full md:w-1/3 flex items-center justify-center flex-col gap-1 bg-pink-gold h-full order-1 lg:order-2 p-12 md:p-0">
-            <Logo />
-
-            <ContactAddressLinks />
-
-            <SocialLinks />
-          </div>
-        </div>
-      </div>
+      <SideNav isNavOpen={isNavOpen} closeNav={closeNav} />
     </>
   );
 };

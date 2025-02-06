@@ -22,8 +22,12 @@ import ExploreFacilitiesButton from "./components/Facilities/ExploreFacilitiesBu
 import NotFound from "./components/ui/NotFound";
 import AccommodationDynamic from "./components/AccommodationDynamic";
 import RouterToTop from "./components/ui/RouterToTop";
+import useLenisScroll from "./hooks/useLenisScroll";
+import BookNowSection from "./components/Contact/BookNowSection";
+import ArticlePage from "./components/Article/ArticlePage";
 
 const App = () => {
+  useLenisScroll();
   return (
     <>
       <Router>
@@ -38,16 +42,17 @@ const App = () => {
             path="/accommodation/:category"
             element={<AccommodationDynamic />}
           />
-          <Route path="/restaurants" element={<Restaurant />} />
-          <Route path="/events" element={<EventsHall />} />
+          <Route path="/restaurant-bar" element={<Restaurant />} />
+          <Route path="/conference-events" element={<EventsHall />} />
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/nearby" element={<NearbyLocations />} />
           <Route path="/recreation" element={<Recreation />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/:slug" element={<ArticlePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-
+        <BookNowSection />
         <BackToTop />
         <ExploreFacilitiesButton />
 

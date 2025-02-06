@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { PiCallBell } from "react-icons/pi";
-import { facilitiesSectionIcon } from "../../constants/data.js";
+// import { facilitiesSectionIcon } from "../../constants/data.js";
+import useFetchApi from "../../hooks/useFetchApi.jsx";
+
+import IconRenderer from "../IconRenderer.jsx";
 
 const ExploreFacilitiesButton = () => {
   const [showButton, setShowButton] = useState(false);
@@ -36,6 +39,7 @@ const ExploreFacilitiesButton = () => {
         onClick={toggleNavbar}
         title="Explore Facilities"
         aria-label="Explore Facilities"
+        type="button"
       >
         <PiCallBell className="w-6 h-6 text-navy" />
       </button>
@@ -48,6 +52,15 @@ const ExploreFacilitiesButton = () => {
 };
 
 const FacilitiesNavbar = ({ showNavbar, onClose }) => {
+  const {
+    data: facilitiesSectionIcon,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_facilities.php",
+    "facilitiesSection"
+  );
+
   const duration = 200;
 
   const handleClose = () => {
@@ -57,6 +70,12 @@ const FacilitiesNavbar = ({ showNavbar, onClose }) => {
   const handleFormClick = (e) => {
     e.stopPropagation();
   };
+
+  if (loading) return null;
+  if (error) {
+    console.error(error);
+    return null;
+  }
 
   return (
     <div
@@ -82,28 +101,40 @@ const FacilitiesNavbar = ({ showNavbar, onClose }) => {
             onClick={onClose}
             title="Close"
             aria-label="Close"
+            type="button"
           >
             <IoClose className="text-2xl" />
           </button>
         </div>
-        {Object.values(facilitiesSectionIcon).map((facility, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-start gap-4 p-4 px-6"
-            id="facilities"
-          >
-            {typeof facility.icon === "function" ? (
-              <facility.icon className="text-xl" />
-            ) : (
-              <img
-                src={facility.icon}
-                alt={facility.title}
-                className="w-12 h-12 mb-2"
+        {Object.values(facilitiesSectionIcon).map((facility, index) => {
+          return (
+            <div
+              key={index}
+              className="flex items-center justify-start gap-4 p-4 px-6"
+              id="facilities"
+            >
+              {/* {typeof facility.icon === "function" ? (
+                <facility.icon className="text-xl" />
+              ) : ( */}
+
+              {/* {IconComponent ? (
+                <IconComponent />
+              ) : (
+                <img
+                  src={facility.icon}
+                  alt={facility.title}
+                  className="w-12 h-12 mb-2"
+                />
+              )} */}
+              <IconRenderer
+                icon={facility.icon}
+                image={facility.image}
+                className={facility.icon ? "text-xl" : "size-10 object-contain"}
               />
-            )}
-            <span className="text-lg font-semibold">{facility.title}</span>
-          </div>
-        ))}
+              <span className="text-lg font-semibold">{facility.title}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

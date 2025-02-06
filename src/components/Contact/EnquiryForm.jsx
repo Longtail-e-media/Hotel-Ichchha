@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { enquiryFormData } from "../../constants/data";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EnquiryForm = ({ onClose, selectedEventTitle }) => {
   const [showForm, setShowForm] = useState(false);
@@ -10,10 +14,53 @@ const EnquiryForm = ({ onClose, selectedEventTitle }) => {
     setShowForm(true);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onClose();
-  };
+  const validationSchema = yup.object(
+    enquiryFormData.reduce((schema, field) => {
+      schema[field.name] =
+        field.type === "email"
+          ? yup
+              .string()
+              .email("Invalid email format")
+              .required(`${field.label} is required`)
+          : yup.string().required(`${field.label} is required`);
+      return schema;
+    }, {})
+  );
+
+  const formik = useFormik({
+    initialValues: enquiryFormData.reduce((values, field) => {
+      values[field.name] =
+        field.name === "eventTitle" ? selectedEventTitle : "";
+      return values;
+    }, {}),
+    validationSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const response = await fetch(
+          "https://www.hotelichchha.com/enquiry_mail_hall_react.php",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          }
+        );
+
+        if (response.ok) {
+          toast.success("Form submitted successfully!");
+          formik.resetForm();
+          onClose();
+        } else {
+          toast.error("Failed to submit form.");
+        }
+      } catch (error) {
+        toast.error("An error occurred. Please try again.");
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
 
   const handleClose = () => {
     setShowForm(false);
@@ -57,7 +104,7 @@ const EnquiryForm = ({ onClose, selectedEventTitle }) => {
         >
           <IoClose />
         </button>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-96 md:h-auto overflow-x-hidden overflow-y-auto">
             {enquiryFormData.map((field) => (
               <div key={field.name}>
@@ -70,6 +117,9 @@ const EnquiryForm = ({ onClose, selectedEventTitle }) => {
                     name={field.name}
                     rows="4"
                     className="text-xl w-[200%] py-2 border-b border-navy/20 focus:outline-none focus:border-goldLight bg-transparent text-navy"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values[field.name]}
                   />
                 ) : (
                   <input
@@ -77,11 +127,16 @@ const EnquiryForm = ({ onClose, selectedEventTitle }) => {
                     id={field.name}
                     name={field.name}
                     className="text-xl w-full py-2 border-b border-navy/20 focus:outline-none focus:border-goldLight bg-transparent text-navy"
-                    defaultValue={
-                      field.name === "eventTitle" ? selectedEventTitle : ""
-                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values[field.name]}
                   />
                 )}
+                {formik.touched[field.name] && formik.errors[field.name] ? (
+                  <span className="text-red-600 text-sm">
+                    {formik.errors[field.name]}
+                  </span>
+                ) : null}
               </div>
             ))}
           </div>
@@ -91,12 +146,14 @@ const EnquiryForm = ({ onClose, selectedEventTitle }) => {
               className="w-full group flex items-center justify-center gap-2 bg-goldLight text-navy hover:bg-navy hover:text-ivory px-6 py-4 rounded-full text-lg transition-all duration-300 ease-linear"
               title="Submit"
               aria-label="Submit"
+              disabled={formik.isSubmitting}
             >
               Submit
               <HiArrowLongRight className="group-hover:translate-x-2 transition-all duration-300 ease-linear" />
             </button>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </div>
   );

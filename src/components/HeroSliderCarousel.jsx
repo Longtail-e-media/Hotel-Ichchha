@@ -26,7 +26,7 @@ const HeroSliderCarousel = ({ images, className }) => {
   };
 
   return (
-    <div className="relative z-30">
+    <div className="relative z-40">
       <Slider
         {...settings}
         ref={sliderRef}
@@ -46,6 +46,7 @@ const HeroSliderCarousel = ({ images, className }) => {
         ))}
       </Slider>
       <button
+        type="button"
         className="absolute top-1/2 left-4 group bg-goldLight text-navy hover:text-ivory hover:bg-navy px-4 py-1 rounded-full text-xl transition-all duration-300 ease-linear"
         onClick={handlePrevSlide}
         title="Previous"
@@ -54,6 +55,7 @@ const HeroSliderCarousel = ({ images, className }) => {
         <HiArrowLongLeft className="group-hover:-translate-x-2 transition-all duration-150 ease-linear" />
       </button>
       <button
+        type="button"
         className="absolute top-1/2 right-4 group bg-goldLight text-navy hover:text-ivory hover:bg-navy px-4 py-1 rounded-full text-xl transition-all duration-300 ease-linear"
         onClick={handleNextSlide}
         title="Next"

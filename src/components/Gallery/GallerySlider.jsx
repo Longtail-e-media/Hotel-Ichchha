@@ -9,9 +9,22 @@ import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-video.css";
 import "lightgallery/css/lg-thumbnail.css";
 import "lightgallery/css/lg-fullscreen.css";
-import { galleryImages } from "../../constants/data.js";
+import useFetchApi from "../../hooks/useFetchApi.jsx";
 
 const GallerySlider = () => {
+  const {
+    data: galleryImages,
+    loading,
+    error,
+  } = useFetchApi("https://hotelichchha.com/api/api_gallery.php", "galleryImages");
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
   return (
     <>
       <div className="relative overflow-hidden bg-bg-gold-light p-4 md:p-8">

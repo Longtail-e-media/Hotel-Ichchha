@@ -41,9 +41,7 @@ const Contact = () => {
             paraColor="text-navy"
           />
         </div>
-        <div className="mt-28">
           <NearbyMapComponent />
-        </div>
       </section>
 
       <section className="bg-bg-gold-dark">

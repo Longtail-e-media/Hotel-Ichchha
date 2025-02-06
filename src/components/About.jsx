@@ -1,15 +1,34 @@
 import React from "react";
 import AboutHome from "./About/AboutHome";
-import { messageFromCEO, ourTeamMembers } from "../constants/data";
-import BODTeam from "./ui/BODTeam";
+import useFetchApi from "../hooks/useFetchApi";
+// import { messageFromCEO, ourTeamMembers } from "../constants/data";
+// import BODTeam from "./ui/BODTeam";
 
 const About = () => {
+  const {
+    data: aboutTeam,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_aboutTeam.php",
+    "aboutTeam"
+  );
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  const { html } = aboutTeam;
   return (
     <>
       <div className="bg-bg-gold-light py-6 md:p-0"></div>
       <AboutHome />
 
-      <section className="bg-bg-gold-dark">
+      {/* <section className="bg-bg-gold-dark">
         {messageFromCEO.map((message) => (
           <div
             key={message.id}
@@ -64,77 +83,13 @@ const About = () => {
               </div>
             </div>
 
-            {/* <div className="venture mt-16">
-              <h3 className="text-4xl font-medium py-8">Associated Venture:</h3>
-              <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-                {message.associatedVentures.map((venture) => (
-                  <div
-                    key={venture.id}
-                    className="bg-ivory p-6 rounded-lg shadow-md"
-                  >
-                    <img
-                      // src={venture.logo}
-                      src={logo}
-                      alt={venture.logo}
-                      className="w-24 mx-auto mb-4"
-                    />
-                    <h4 className="text-lg font-semibold">{venture.title}</h4>
-                    <h5 className="text-lg">- {venture.post}</h5>
-                    <a
-                      href={venture.url}
-                      className="block text-blue-500 hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Visit Website
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div> */}
           </div>
         ))}
       </section>
 
-      <BODTeam ourTeamMembers={ourTeamMembers} />
-      {/* <section className="bg-bg-gold-light">
-        <div className="flexCenter flex-col w-3/4 mx-auto">
-          <h3 className="text-navy font-medium">
-            Get to Know the Faces Behind Our Success
-          </h3>
-          <h4 className="text-center">
-            Unveil the Talented Individuals Who Embark on a Collective Mission
-            to Elevate Your Experience at Hotel Ichchha
-          </h4>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-28">
-          {ourTeamMembers.map((member) => (
-            <div
-              key={member.id}
-              className="relative overflow-hidden group"
-              style={{ perspective: "1000px" }}
-            >
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-full h-96 object-cover shadow-md transition duration-500 ease-in-out transform group-hover:scale-125"
-              />
-              <div className="absolute inset-0 overlay bg-gradient-to-b from-[rgba(0,0,0,0.2)] to-[rgba(0,0,0,0.8)] w-full h-full"></div>
-              <div
-                className="group absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,0.6)] bg-opacity-75 text-ivory text-center transition-all duration-700 ease-in-out transform translate-y-1/2 group-hover:translate-y-0"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <div className="p-4">
-                  <h3 className="text-3xl font-medium mb-6 group-hover:mb-0 transition-all duration-300">
-                    {member.name}
-                  </h3>
-                  <p className="text-ivory my-4">{member.position}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
+      <BODTeam ourTeamMembers={ourTeamMembers} /> */}
+
+      <main dangerouslySetInnerHTML={{ __html: html }} />
     </>
   );
 };

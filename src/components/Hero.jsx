@@ -61,6 +61,7 @@ const Hero = () => {
       </div>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-4">
         <button
+          type="button"
           onClick={handlePrev}
           className="bg-gray-800 text-white px-3 py-1 rounded-full"
           title="Previous"
@@ -69,6 +70,7 @@ const Hero = () => {
           Prev
         </button>
         <button
+          type="button"
           onClick={handleNext}
           className="bg-gray-800 text-white px-3 py-1 rounded-full"
           title="Next"

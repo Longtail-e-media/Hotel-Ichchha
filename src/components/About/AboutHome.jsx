@@ -1,30 +1,46 @@
 import React from "react";
-import { aboutContents, introVideo, ichchha } from "../../constants/data.js";
+// import { aboutContents } from "../../constants/data.js";
+// import { introVideo } from "../../constants/data.js";
+import { ichchha } from "../../constants/data.js";
 import ScrollReveal from "../ScrollReveal";
+import useFetchApi from "../../hooks/useFetchApi.jsx";
 
 const AboutHome = () => {
+  const {
+    data: aboutContents,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_homeArticle.php",
+    "aboutContents"
+  );
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  const { subtitle, subheading, description, video } = aboutContents;
+
   return (
     <>
       <section className="about bg-bg-gold-light">
         <div className="container mx-auto">
-          {aboutContents.map((content) => (
-            // <div key={content.id} className="flexCenter flex-col w-3/4 mx-auto">
-            //   {/* <h2>{content.title}</h2> */}
-            //   <h3 className="text-navy font-medium">{content.subtitle}</h3>
-            //   <h4 className="text-center">{content.subheading}</h4>
-            //   <p className="text-lg text-center">{content.description}</p>
-            // </div>
-            <div key={content.id}>
-              <ScrollReveal
-                heading={content.subtitle}
-                subheading={content.subheading}
-                para={content.description}
-                textColor="text-navy"
-                highlightColor="text-navy"
-                paraColor="text-navy"
-              />
-            </div>
-          ))}
+          {/* {aboutContents.map((content) => (
+            <div key={content.id}> */}
+          <ScrollReveal
+            heading={subtitle}
+            subheading={subheading}
+            para={description}
+            textColor="text-navy"
+            highlightColor="text-navy"
+            paraColor="text-navy"
+          />
+          {/* </div>
+          ))} */}
 
           <div className="video mt-12 md:mt-28 h-full lg:h-[35rem] overflow-hidden outline outline-1 outline-goldLight -outline-offset-[12px]">
             <video
@@ -36,7 +52,7 @@ const AboutHome = () => {
               id="backgroundVideo"
               poster={ichchha}
             >
-              <source src={introVideo} type="video/mp4" />
+              <source src={video} type="video/mp4" />
               <track
                 src="#"
                 kind="captions"

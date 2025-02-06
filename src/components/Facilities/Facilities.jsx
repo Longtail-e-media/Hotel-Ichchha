@@ -1,9 +1,27 @@
 import React from "react";
-import { hotelFacilities } from "../../constants/data.js";
+// import { hotelFacilities } from "../../constants/data.js";
 import ScrollReveal from "../ScrollReveal";
 import { Link } from "react-router-dom";
+import useFetchApi from "../../hooks/useFetchApi";
 
 const Facilities = () => {
+  const {
+    data: hotelFacilities,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_homeFacilities.php",
+    "hotelFacilities"
+  );
+
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   const facilitiesTitle = hotelFacilities.find(
     (facility) => facility.id === "facilitiesTitle"
   );
@@ -13,7 +31,7 @@ const Facilities = () => {
   );
 
   return (
-    <section id="facilities" className="bg-bg-gold-light">
+    <section id="facilities-section" className="bg-bg-gold-light">
       <div className="container">
         {/* <div className="flexCenter flex-col w-3/4 mx-auto mb-8">
           <h3 className="text-navy font-medium">{facilitiesTitle.title}</h3>
@@ -31,8 +49,8 @@ const Facilities = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 md:mt-28">
-        {otherFacilities.map((facility) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12 md:mt-28">
+        {otherFacilities.slice(0,6).map((facility) => (
           <div
             key={facility.id}
             className="relative overflow-hidden group"
@@ -49,10 +67,10 @@ const Facilities = () => {
               style={{ transformStyle: "preserve-3d" }}
             >
               <div className="p-4">
-                <h3 className="text-3xl font-medium mb-24 group-hover:mb-0 transition-all duration-300">
+                <h3 className="text-3xl capitalize font-medium mb-24 group-hover:mb-0 transition-all duration-300">
                   {facility.title}
                 </h3>
-                <p className="text-ivory my-4 line-clamp-4">
+                <p className="text-ivory my-4 line-clamp-4 group-hover:mt-5 group-hover:mb-12 transition-all duration-300">
                   {facility.description}
                 </p>
                 <Link

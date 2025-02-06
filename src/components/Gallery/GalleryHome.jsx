@@ -71,6 +71,7 @@ const GalleryHome = () => {
               onClick={closeModal}
               title="Close"
               aria-label="Close"
+              type="button"
             >
               &times;
             </button>

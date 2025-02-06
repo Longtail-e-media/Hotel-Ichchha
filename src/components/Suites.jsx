@@ -1,11 +1,27 @@
 import React from "react";
 import { HiArrowLongRight } from "react-icons/hi2";
-import { accomodationContents } from "../constants/data.js";
+// import { accomodationContents } from "../constants/data.js";
 import ScrollReveal from "./ScrollReveal";
 import { Link } from "react-router-dom";
+import useFetchApi from "../hooks/useFetchApi";
 
 const Suites = () => {
-  const accomodationData = accomodationContents[0];
+  const {
+    data: accommodationContents,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_room.php",
+    "accommodationContents"
+  );
+
+  if (loading) return null;
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  const accomodationData = accommodationContents[0];
   const duration = "700";
 
   return (
@@ -13,9 +29,12 @@ const Suites = () => {
       <section className="bg-bg-gold-light">
         <div className="my-12 md:my-0">
           <ScrollReveal
-            heading={accomodationData.title}
-            subheading={accomodationData.subtitle}
-            para={accomodationData.description}
+            // heading={accomodationData.title}
+            // subheading={accomodationData.subtitle}
+            // para={accomodationData.description}
+            heading="Exclusive Rooms and Suites"
+            subheading="Experience the ultimate Staycation in Hotel Ichchha"
+            para="Hotel Ichchha rooms and suites are a symphony of luxury and comfort, designed to enchant every guest where luxury embraces elegance, Hotel Ichchha offers an exquisite blend of comfort and grandeur. Experience unparalleled hospitality and serene elegance in every stay."
             textColor="text-navy"
             highlightColor="text-navy"
             paraColor="text-navy"
@@ -54,6 +73,7 @@ const Suites = () => {
                       className={`flex transition-all duration-${duration} md:group-hover:translate-x-4`}
                     >
                       <button
+                        type="button"
                         href={suite.router}
                         className={`bg-goldLight text-navy group-hover:text-ivory group-hover:bg-navy px-4 py-1 rounded-full text-2xl transition-all duration-300 ease-linear`}
                         title="Explore More"

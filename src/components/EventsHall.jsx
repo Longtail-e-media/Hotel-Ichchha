@@ -1,10 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import { eventVenues } from "../constants/data";
+// import { eventVenues } from "../constants/data";
 import ReusableSlider from "./ReusableSlider";
 import EnquiryForm from "./Contact/EnquiryForm";
 import ScrollReveal from "./ScrollReveal";
+import useFetchApi from "../hooks/useFetchApi";
 
 const EventsHall = () => {
+  const {
+    data: eventVenues,
+    loading,
+    error,
+  } = useFetchApi(
+    "https://hotelichchha.com/api/api_occasions.php",
+    "eventVenues"
+  );
+
   const [showEnquiryForm, setShowEnquiryForm] = useState(false);
   const [selectedEventTitle, setSelectedEventTitle] = useState("");
   const sectionRefs = useRef([]);
@@ -81,6 +91,14 @@ const EventsHall = () => {
     };
   }, []);
 
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <>
       <section className="bg-bg-gold-light">
@@ -108,9 +126,17 @@ const EventsHall = () => {
               }`}
             >
               <div className="w-full">
+
+              {/* <ReusableSlider
+                  images={venue.imageUrls.map((image) => ({
+                    src: image.src,
+                    alt: image.alt,
+                  }))}
+                  className="w-full h-64 sm:h-96 lg:h-80 xl:h-96 object-cover"
+                /> */}
                 <ReusableSlider
-                  images={venue.imageUrls}
-                  alt={venue.title}
+                  images={venue.imageUrls.map((image) => image.src)}
+                  alt={venue.imageUrls.map((image) => image.alt)}
                   className="w-full h-64 sm:h-96 lg:h-80 xl:h-96 object-cover"
                 />
               </div>
@@ -121,12 +147,12 @@ const EventsHall = () => {
                     {venue.description}
                   </p>
                   <ul className="flex items-center gap-4 py-4">
-                    {venue.amenities.map((amenity, index) => (
+                    {Object.entries(venue.amenities).map(([key, amenity]) => (
                       <li
-                        key={index}
+                        key={key}
                         className="flex items-center gap-2 text-xs sm:text-sm xl:text-base"
                       >
-                        {amenity}
+                        {key}: {amenity}
                       </li>
                     ))}
                   </ul>
@@ -135,6 +161,7 @@ const EventsHall = () => {
                     className="bg-goldLight text-navy hover:text-ivory hover:bg-navy px-4 py-1 rounded-full text-base transition-all duration-300 ease-linear"
                     title="Enquiry"
                     aria-label="Enquiry"
+                    type="button"
                   >
                     Enquiry
                   </button>

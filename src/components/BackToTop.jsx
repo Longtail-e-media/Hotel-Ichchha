@@ -35,6 +35,7 @@ const BackToTop = () => {
     //   onClick={scrollToTop}
     // >
     <button
+      type="button"
       className={`${
         showButton ? "scale-100 translate-y-0" : "scale-0 translate-y-20"
       } z-50 fixed bottom-4 right-4 bg-goldLight backdrop-blur-md text-navy p-3 rounded-full shadow-lg transition-all duration-500 ease-in-out hover:bg-ivory`}

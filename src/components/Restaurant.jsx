@@ -1,10 +1,23 @@
 import React from "react";
-import { diningOptions } from "../constants/data";
+// import { diningOptions } from "../constants/data";
 import ReusableSlider from "./ReusableSlider";
 import ScrollReveal from "./ScrollReveal";
 import { Link } from "react-router-dom";
+import useFetchApi from "../hooks/useFetchApi";
 
 const Restaurant = () => {
+  const {
+    data: diningOptions,
+    loading,
+    error,
+  } = useFetchApi("https://hotelichchha.com/api/api_dine.php", "diningOptions");
+  if (loading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
   return (
     <>
       <section className="bg-bg-gold-light">
@@ -33,8 +46,10 @@ const Restaurant = () => {
                   className="w-full h-[600px] object-cover"
                 /> */}
                 <ReusableSlider
-                  images={option.imageUrls}
-                  alt={option.title}
+                  images={option.imageUrls.map((image) => image.src)}
+                  alt={option.imageUrls.map((image) => image.alt)}
+                  // images={option.imageUrls}
+                  // alt={option.title}
                   className="w-full h-64 sm:h-96 md:h-96 lg:h-[38rem] object-cover"
                 />
                 <div className="my-8 flex justify-center gap-5 flex-col">
@@ -51,7 +66,8 @@ const Restaurant = () => {
                       </button>
                     </div> */}
                     <Link
-                      to="#"
+                      to={option.foodMenu}
+                      target="_blank"
                       className="bg-goldLight text-navy hover:text-ivory hover:bg-navy px-4 py-1 rounded-full text-sm md:text-base transition-all duration-300 ease-linear"
                     >
                       View Menu
@@ -71,6 +87,9 @@ const Restaurant = () => {
 
                     {/* <p>Food Menu: {option.foodMenu}</p> */}
                   </div>
+                  <p className="text-justify text-sm md:text-base">
+                    {option.description}  
+                  </p>
                 </div>
               </div>
             ))}
