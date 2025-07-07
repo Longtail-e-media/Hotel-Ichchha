@@ -1,6 +1,7 @@
 import React from "react";
 import useFetchApi from "../../hooks/useFetchApi";
 import IconRenderer from "../IconRenderer";
+import { Link } from "react-router-dom";
 
 const SocialLinks = () => {
   const {
@@ -26,15 +27,17 @@ const SocialLinks = () => {
               key={index}
               className="text-navy hover:text-gold hover:scale-125 transition-all duration-300 ease-linear"
             >
-              <IconRenderer
-                icon={link.icon}
-                image={link.image}
-                className={
-                  link.icon
-                    ? "text-lg transition-all duration-300 ease-linear group-hover:scale-125"
-                    : "size-4 object-contain transition-all duration-300 ease-linear group-hover:scale-125"
-                }
-              />
+              <Link to={link.url} target="_blank" rel="noopener noreferrer">
+                <IconRenderer
+                  icon={link.icon}
+                  image={link.image}
+                  className={
+                    link.icon
+                      ? "text-lg transition-all duration-300 ease-linear group-hover:scale-125"
+                      : "size-4 object-contain transition-all duration-300 ease-linear group-hover:scale-125"
+                  }
+                />
+              </Link>
             </li>
           );
         })}
