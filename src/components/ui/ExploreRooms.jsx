@@ -10,12 +10,7 @@ const ExploreRooms = ({ otherRooms }) => {
           Explore other Rooms
         </h3>
         <p className="text-navy text-sm text-justify md:text-lg md:text-center">
-          Hotel Ichchha rooms and suites are a symphony of luxury and comfort,
-          designed to enchant every guest where luxury embraces elegance, Hotel
-          Ichchha offers an exquisite blend of comfort and grandeur. Experience
-          unparalleled hospitality and serene elegance in every stay. Deluxe
-          Room Deluxe Room The Deluxe Room offers a comfortable stay with modern
-          amenities and elegant decoration.
+          Hotel Ichchha offers a selection of well-appointed rooms and suites—from cozy Standard Rooms to luxurious Executive Room. Each space is designed for comfort and style, featuring modern amenities, 24-hour room service, and a serene ambiance for a restful stay. Hotel Ichchha offers a selection of well-appointed rooms and suites—from cozy Standard Rooms to luxurious Executive Room. 
         </p>
       </div>
       <div className="container mx-auto">

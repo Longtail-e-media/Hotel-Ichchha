@@ -153,7 +153,6 @@ const EnquiryForm = ({ onClose, selectedEventTitle }) => {
             </button>
           </div>
         </form>
-        <ToastContainer />
       </div>
     </div>
   );

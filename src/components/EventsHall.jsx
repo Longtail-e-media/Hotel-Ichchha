@@ -4,6 +4,8 @@ import ReusableSlider from "./ReusableSlider";
 import EnquiryForm from "./Contact/EnquiryForm";
 import ScrollReveal from "./ScrollReveal";
 import useFetchApi from "../hooks/useFetchApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EventsHall = () => {
   const {
@@ -177,6 +179,7 @@ const EventsHall = () => {
           selectedEventTitle={selectedEventTitle}
         />
       )}
+      <ToastContainer />
     </>
   );
 };

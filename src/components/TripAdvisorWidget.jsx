@@ -20,7 +20,7 @@ const TripAdvisorWidget = () => {
   return (
     <div id="TA_cdswritereviewlg465" className="TA_cdswritereviewlg">
       <ul id="DaUw9LqnJBEU" className="TA_links 9KAp72F4FJK">
-        <li id="paaRI3NJkIq" className="Zs5Sx2p">
+        <li id="paaRI3NJkIq" className="Zs5Sx2p w-1/2">
           <Link
             target="_blank"
             to="https://www.tripadvisor.com/Hotel_Review-g21156991-d11283455-Reviews-Hotel_Ichchha-Pipara_Simara_Narayani_Zone_Central_Region.html"
