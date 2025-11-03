@@ -53,6 +53,7 @@ const Navbar = () => {
   }
 
   const { logo_upload, whatsapp_a } = siteregulars;
+  const whatsappNumbers  = whatsapp_a?.split(",") || [];
 
   return (
     <>
@@ -75,17 +76,24 @@ const Navbar = () => {
               visible ? "scale-100 translate-x-0" : "scale-0 translate-x-full"
             } ${window.scrollY > 0 ? "filter-black" : ""}`}
           >
-            <Link
-              to={`https://wa.me/${whatsapp_a}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-base lg:text-lg"
-              title="WhatsApp"
-              aria-label="WhatsApp"
-            >
-              <FaWhatsapp className="text-3xl text-gold" />{" "}
-              <span className="hidden md:block">{whatsapp_a}</span>
-            </Link>
+            <div className="flex items-center gap-2 text-base lg:text-lg">
+              <FaWhatsapp className="text-3xl text-gold" />
+              {whatsappNumbers.map((num, index) => {
+                const cleanNum = num.trim().replace("+", "");
+                return (
+                  <Link
+                    key={index}
+                    to={`https://wa.me/${cleanNum}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`WhatsApp ${num.trim()}`}
+                  >
+                    {num.trim()}
+                    {index < whatsappNumbers.length - 1 && ","}&nbsp;
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           <h1 className="absolute left-1/2 -translate-x-1/2">

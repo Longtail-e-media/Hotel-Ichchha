@@ -23,7 +23,7 @@ const Footer = () => {
   if (error) {
     return <div>{error}</div>;
   }
-
+console.log(footerContents);
   return (
     <div className="bg-pink-gold text-navy">
       <section>
