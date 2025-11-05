@@ -77,7 +77,16 @@ const Navbar = () => {
             } ${window.scrollY > 0 ? "filter-black" : ""}`}
           >
             <div className="flex items-center gap-2 text-base lg:text-lg">
-              <FaWhatsapp className="text-3xl text-gold" />
+              <Link
+              to={whatsappNumbers.length > 0 ? `https://wa.me/${whatsappNumbers[0]}` : '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-base lg:text-lg"
+              title="WhatsApp"
+              aria-label="WhatsApp"
+            >
+              <FaWhatsapp className="text-3xl text-gold" />{" "}
+            </Link>
               {whatsappNumbers.map((num, index) => {
                 const cleanNum = num.trim().replace("+", "");
                 return (
@@ -87,12 +96,24 @@ const Navbar = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`WhatsApp ${num.trim()}`}
+                    className="hidden md:block"
                   >
                     {num.trim()}
                     {index < whatsappNumbers.length - 1 && ","}&nbsp;
                   </Link>
                 );
               })}
+              {/* <Link
+              to={`https://wa.me/${whatsapp_a}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-base lg:text-lg"
+              title="WhatsApp"
+              aria-label="WhatsApp"
+            >
+              <FaWhatsapp className="text-3xl text-gold" />{" "}
+              <span className="hidden md:block">{whatsapp_a}</span>
+            </Link> */}
             </div>
           </div>
 
